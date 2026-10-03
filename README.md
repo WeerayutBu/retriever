@@ -2,6 +2,23 @@
 
 A retrieval demo built on LlamaIndex, with optional reranking support.
 
+## Overview
+
+```mermaid
+flowchart LR
+    subgraph S1["Step 1: Embed query"]
+        Q[Query] --> E[Embedding]
+    end
+    subgraph S2["Step 2: Retrieve"]
+        V[Vector search] --> C[Top 64 candidates]
+    end
+    subgraph S3["Step 3: Rerank"]
+        R[Reranker] --> O[Top 8 results]
+    end
+    E --> V
+    C --> R
+```
+
 ## Basic Usage
 
 ### Makefile startup
@@ -69,3 +86,32 @@ r.load()
 for node in r.search("what causes hiccups?"):
     print(node.metadata["id"], node.text, node.score)
 ```
+
+## API specification
+
+Base URL: `http://127.0.0.1:18763`
+
+| Method | Endpoint | Request | Response |
+| --- | --- | --- | --- |
+| GET | `/` | — | `{"status":"ok"}` |
+| GET | `/retrieve` | Required query string: `q` | Up to 8 ranked results |
+
+Retrieval response (example):
+
+```json
+{
+  "results": [
+    {
+      "id": "document-001",
+      "text": "Document text.",
+      "score": 0.95
+    }
+  ]
+}
+```
+
+`id` may be null. Higher scores rank better; scores are not probabilities.
+
+Status: `200` success · `422` missing `q` · `500` server error.
+
+Docs: `/docs` · OpenAPI: `/openapi.json`.
