@@ -18,26 +18,37 @@ Docker startup requires NVIDIA GPU support. Local startup requires the Python
 dependencies from `Dockerfile`. Download missing models with `make models`
 (requires the Hugging Face CLI). Use `PORT=8080` to change the port.
 
-### Manual startup
+### Startup and inference
+
+#### Option 1: Docker
 
 ```bash
-# Docker
+# Terminal 1: Startup (from the repository root)
 make build
 docker run --rm --gpus all -p 18763:18763 --shm-size=4g \
   -v "$PWD/.cache:/app/.cache" retriever \
   python -m uvicorn api.main:app --host 0.0.0.0 --port 18763
+```
 
-# Container shell
-docker run --rm -it --gpus all retriever bash
+```bash
+# Terminal 2: Inference (wait for Application startup complete)
+# Keep Terminal 1 running
+curl --get --data-urlencode "q=what causes hiccups?" \
+  http://127.0.0.1:18763/retrieve
+```
 
-# Local API
+#### Option 2: Local API
+
+```bash
+# Terminal 1: Startup (from the repository root)
 python -m uvicorn api.main:app --port 18763 --reload
 ```
 
-### Test retrieval
-
 ```bash
-curl --get --data-urlencode "q=what causes hiccups?" http://127.0.0.1:18763/retrieve
+# Terminal 2: Inference (wait for Application startup complete)
+# Keep Terminal 1 running
+curl --get --data-urlencode "q=what causes hiccups?" \
+  http://127.0.0.1:18763/retrieve
 ```
 
 ### Python usage
