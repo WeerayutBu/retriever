@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## LLMs
-# hf download google/medgemma-27b-it                      --local-dir  ../.cache/embeddings/medgemma-27b-it 
+# hf download google/medgemma-27b-it                      --local-dir  ../.cache/embeddings/medgemma-27b-it
 # hf download ThaiLLM/ThaiLLM-8B                          --local-dir  ../.cache/embeddings/ThaiLLM-8B
 # hf download google/gemma-3-270m-it                      --local-dir  ../.cache/embeddings/gemma-3-270m-it
 # hf download google/gemma-3-4b-it                        --local-dir  ../.cache/embeddings/gemma-3-4b-it
@@ -19,4 +19,3 @@ hf download Qwen/Qwen3-Embedding-0.6B                          --local-dir  ../.
 
 ## Rerankers
 hf download BAAI/bge-reranker-v2-m3                          --local-dir  ../.cache/embeddings/bge-reranker-v2-m3
-

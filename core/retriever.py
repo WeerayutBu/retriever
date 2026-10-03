@@ -89,5 +89,3 @@ class Retriever:
             nodes = self.reranker.postprocess_nodes(nodes, query_str=query)
 
         return nodes
-
-
