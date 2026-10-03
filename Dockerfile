@@ -9,7 +9,7 @@ WORKDIR /app
 
 # System deps: python, pip, build tools, git, curl (often needed), and common libs
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 python3-pip python3-venv \
+    python3 python3-dev python3-pip python3-venv \
     build-essential \
     git curl ca-certificates \
     && rm -rf /var/lib/apt/lists/*
@@ -31,10 +31,10 @@ RUN pip install -e llama_index/llama-index-integrations/vector_stores/llama-inde
 RUN python -m pip install --only-binary=:all: sentencepiece
 RUN pip install -U llama-index llama-index-embeddings-huggingface llama-index-vector-stores-lancedb sentence-transformers
 
-RUN python -m pip install --only-binary=:all: --force-reinstall numpy==1.26.4 pandas==2.2.3 
+RUN python -m pip install --only-binary=:all: --force-reinstall numpy==1.26.4 pandas==2.2.3
 RUN python -m pip install --only-binary=:all: "datasets==3.3.2"
 
-RUN pip install "pyzmq<25.0" 
+RUN pip install "pyzmq<25.0"
 RUN pip install "ipykernel==6.25.2" "tornado<6.3" "traitlets<5.11"
 RUN pip install "git+https://github.com/FlagOpen/FlagEmbedding.git"
 

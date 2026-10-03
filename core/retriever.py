@@ -16,7 +16,6 @@ class Retriever:
         model_name: str,
         reranker_name: str | None = None,
         cache_dir: str = "./.cache",
-        table: str = "embeddings",
         device: str = "cuda",
         top_k: int = 8,
         retrieve_k: int = 64,
@@ -87,9 +86,6 @@ class Retriever:
         ).retrieve(query)
 
         if self.reranker:
-            try:
-                nodes = self.reranker.postprocess_nodes(nodes, query_str=query)
-            except Exception:
-                pass
+            nodes = self.reranker.postprocess_nodes(nodes, query_str=query)
 
         return nodes

@@ -2,12 +2,8 @@
 __pycache__/
 *.pyc
 .git/
+.cache/
 *.db
 *.lance
-
-# Additional
-<!-- .cache -->
-.venv
-<!-- data/data.csv -->
 data/proc.ipynb
-notebooks
+notebooks/
