@@ -13,7 +13,7 @@ flowchart LR
         V[Vector search] --> C[Top 64 candidates]
     end
     subgraph S3["Step 3: Rerank"]
-        R[Reranker] --> O[Top 8 results]
+        R[Reranker] --> O[Top 16 results by default]
     end
     E --> V
     C --> R
@@ -25,6 +25,7 @@ flowchart LR
 
 ```bash
 make up                     # Build and run the API with the full dataset
+make down                   # Stop the API container
 make demo                   # Build and run with data/demo.csv
 make start                  # Alias for make up
 make dev                    # Run locally with installed Python dependencies
@@ -33,7 +34,27 @@ make health                 # Check http://127.0.0.1:18763/
 
 Docker startup requires NVIDIA GPU support. Local startup requires the Python
 dependencies from `Dockerfile`. Download missing models with `make models`
-(requires the Hugging Face CLI). Use `PORT=8080` to change the port.
+(requires the Hugging Face CLI). `make up` starts the API in the background.
+
+Configure startup in `.env` (loaded by the Makefile):
+
+```dotenv
+CSV_PATH=data/data.csv
+RETRIEVE_K=64
+TOP_K=16
+HOST=0.0.0.0
+PORT=18763
+IMAGE=retriever
+CONTAINER=retriever
+GPU_ARGS=--gpus all
+```
+
+`RETRIEVE_K` sets the number of vector search candidates; `TOP_K` sets the
+maximum number of results after reranking. Require `1 <= TOP_K <= RETRIEVE_K`.
+After changing `.env`, run `make down` then `make up` to apply the settings.
+Command-line overrides also work: `make up TOP_K=8 PORT=8080`.
+Use `make dev` for local startup with these settings; direct Python or Docker
+commands must receive the environment variables explicitly.
 
 ### Startup and inference
 
@@ -94,7 +115,7 @@ Base URL: `http://127.0.0.1:18763`
 | Method | Endpoint | Request | Response |
 | --- | --- | --- | --- |
 | GET | `/` | — | `{"status":"ok"}` |
-| GET | `/retrieve` | Required query string: `q` | Up to 8 ranked results |
+| GET | `/retrieve` | Required query string: `q` | Up to `TOP_K` ranked results (default 16) |
 
 Retrieval response (example):
 
